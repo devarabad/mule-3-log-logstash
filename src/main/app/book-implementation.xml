@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+  <asynchronous-processing-strategy name="Asynchronous_Processing_Strategy" doc:name="Asynchronous Processing Strategy"/>
+  <spring:beans>
+    <spring:bean id="Bean" name="invokeLogOp" class="common.logging.LogOp"/>
+  </spring:beans>
+  <flow name="log-java">
+    <component class="common.logging.LogOp" doc:name="Java Log"/>
+  </flow>
+
+  <flow name="get-book">
+    <message-properties-transformer scope="invocation" doc:name="Set Metadata">
+      <add-message-property key="environment-not-used" value="${env}"/>
+      <add-message-property key="service" value="#[app.name]"/>
+      <add-message-property key="correlationId" value="#[message.correlationId != null ? message.correlationId : message.id]"/>
+      <add-message-property key="errorId-not-used" value="#[message.exception != null ? message.exception.getMessage() : '']"/>
+      <add-message-property key="errorType-not-used" value="#[message.exception != null ? message.exception.getCode() : '']"/>
+      <add-message-property key="message-not-used" value="#[message]"/>
+      <add-message-property key="logCategory" value="get-book"/>
+    </message-properties-transformer>
+    <set-property propertyName="Content-Type" value="application/java" doc:name="Java Content Property"/>
+    <logger message="#[dw('{environment: &quot;${env}&quot;, service: flowVars.service, correlationId: flowVars.correlationId, inboundProperties: inboundProperties, outboundProperties: outboundProperties, payload: payload}', 'application/json')]" level="INFO" category="get-book.start" doc:name="Log Start"/>
+
+    <set-payload value="{
+	&quot;id&quot; : &quot;SbBGk&quot;,
+	&quot;title&quot; : &quot;Stiff: The Curious Lives of Human Cadavers&quot;,
+	&quot;description&quot; : &quot;Stiff: The Curious Lives of Human Cadavers&quot;,
+	&quot;datetime&quot; : &quot;2020-04-03&quot;,
+	&quot;genre&quot; : &quot;science&quot;,
+	&quot;author&quot; : &quot;Mary Roach&quot;,
+	&quot;link&quot; : &quot;http://e-bookmobile.com/books/Stiff&quot;
+}" mimeType="application/json" doc:name="JSON Message"/>
+    <logger message="#[dw('{environment: &quot;${env}&quot;, service: flowVars.service, correlationId: flowVars.correlationId, inboundProperties: inboundProperties, outboundProperties: outboundProperties, payload: payload}', 'application/json')]" level="INFO" category="get-book.end" doc:name="Log End"/>
+  </flow>
+  <flow name="post-book">
+    <message-properties-transformer scope="invocation" doc:name="Set Metadata">
+      <add-message-property key="environment-not-used" value="${env}"/>
+      <add-message-property key="service" value="#[app.name]"/>
+      <add-message-property key="correlationId" value="#[message.correlationId != null ? message.correlationId : message.id]"/>
+      <add-message-property key="errorId-not-used" value="#[message.exception != null ? message.exception.getMessage() : '']"/>
+      <add-message-property key="errorType-not-used" value="#[message.exception != null ? message.exception.getCode() : '']"/>
+      <add-message-property key="message-not-used" value="#[message]"/>
+      <add-message-property key="logCategory" value="get-book"/>
+    </message-properties-transformer>
+    <logger message="#[dw('{environment: &quot;${env}&quot;, service: flowVars.service, correlationId: flowVars.correlationId, inboundProperties: inboundProperties, outboundProperties: outboundProperties, payload: payload}', 'application/json')]" level="INFO" category="post-book.start" doc:name="Log Start"/>
+    <set-property propertyName="Content-Type" value="application/json" doc:name="JSON Content Property"/>
+    <set-payload value="{
+&quot;message&quot; : &quot;Book added (but not really)&quot;
+}" doc:name="JSON Message"/>
+    <set-property propertyName="Content-Type" value="application/java" doc:name="Java Content Property"/>
+    <logger message="#[dw('{environment: &quot;${env}&quot;, service: flowVars.service, correlationId: flowVars.correlationId, inboundProperties: inboundProperties, outboundProperties: outboundProperties, payload: payload}', 'application/json')]" level="INFO" category="post-book.end" doc:name="Log End"/>
+
+  </flow>
+  <flow name="put-book">
+    <message-properties-transformer scope="invocation" doc:name="Set Metadata">
+      <add-message-property key="environment-not-used" value="${env}"/>
+      <add-message-property key="service" value="#[app.name]"/>
+      <add-message-property key="correlationId" value="#[message.correlationId != null ? message.correlationId : message.id]"/>
+      <add-message-property key="errorId-not-used" value="#[message.exception != null ? message.exception.getMessage() : '']"/>
+      <add-message-property key="errorType-not-used" value="#[message.exception != null ? message.exception.getCode() : '']"/>
+      <add-message-property key="message-not-used" value="#[message]"/>
+      <add-message-property key="logCategory" value="get-book"/>
+    </message-properties-transformer>
+    <logger message="#[dw('{environment: &quot;${env}&quot;, service: flowVars.service, correlationId: flowVars.correlationId, inboundProperties: inboundProperties, outboundProperties: outboundProperties, payload: payload}', 'application/json')]" level="INFO" category="put-book.start" doc:name="Log Start"/>
+    <set-property propertyName="Content-Type" value="application/json" doc:name="JSON Content Property"/>
+    <set-payload value="{
+&quot;message&quot; : &quot;Book updated (but not really)&quot;
+}" doc:name="JSON Message"/>
+    <set-property propertyName="Content-Type" value="application/java" doc:name="Java Content Property"/>
+    <logger message="#[dw('{environment: &quot;${env}&quot;, service: flowVars.service, correlationId: flowVars.correlationId, inboundProperties: inboundProperties, outboundProperties: outboundProperties, payload: payload}', 'application/json')]" level="INFO" category="put-book.end" doc:name="Log End"/>
+
+  </flow>
+  <flow name="patch-book">
+    <message-properties-transformer scope="invocation" doc:name="Set Metadata">
+      <add-message-property key="environment-not-used" value="${env}"/>
+      <add-message-property key="service" value="#[app.name]"/>
+      <add-message-property key="correlationId" value="#[message.correlationId != null ? message.correlationId : message.id]"/>
+      <add-message-property key="errorId-not-used" value="#[message.exception != null ? message.exception.getMessage() : '']"/>
+      <add-message-property key="errorType-not-used" value="#[message.exception != null ? message.exception.getCode() : '']"/>
+      <add-message-property key="message-not-used" value="#[message]"/>
+      <add-message-property key="logCategory" value="get-book"/>
+    </message-properties-transformer>
+    <logger message="#[dw('{environment: &quot;${env}&quot;, service: flowVars.service, correlationId: flowVars.correlationId, inboundProperties: inboundProperties, outboundProperties: outboundProperties, payload: payload}', 'application/json')]" level="INFO" category="patch-book.start" doc:name="Log Start"/>
+    <set-property propertyName="Content-Type" value="application/json" doc:name="JSON Content Property"/>
+    <set-payload value="{
+&quot;message&quot; : &quot;Book partially updated (but not really)&quot;
+}" doc:name="JSON Message"/>
+    <set-property propertyName="Content-Type" value="application/java" doc:name="Java Content Property"/>
+    <logger message="#[dw('{environment: &quot;${env}&quot;, service: flowVars.service, correlationId: flowVars.correlationId, inboundProperties: inboundProperties, outboundProperties: outboundProperties, payload: payload}', 'application/json')]" level="INFO" category="patch-book.end" doc:name="Log End"/>
+
+  </flow>
+  <flow name="delete-book">
+    <message-properties-transformer scope="invocation" doc:name="Set Metadata">
+      <add-message-property key="environment-not-used" value="${env}"/>
+      <add-message-property key="service" value="#[app.name]"/>
+      <add-message-property key="correlationId" value="#[message.correlationId != null ? message.correlationId : message.id]"/>
+      <add-message-property key="errorId-not-used" value="#[message.exception != null ? message.exception.getMessage() : '']"/>
+      <add-message-property key="errorType-not-used" value="#[message.exception != null ? message.exception.getCode() : '']"/>
+      <add-message-property key="message-not-used" value="#[message]"/>
+      <add-message-property key="logCategory" value="get-book"/>
+    </message-properties-transformer>
+    <set-property propertyName="Content-Type" value="application/java" doc:name="Java Content Property"/>
+    <logger message="#[dw('{environment: &quot;${env}&quot;, service: flowVars.service, correlationId: flowVars.correlationId, inboundProperties: inboundProperties, outboundProperties: outboundProperties, payload: payload}', 'application/json')]" level="INFO" category="delete-book.start" doc:name="Log Start"/>
+    <set-payload value="{
+&quot;message&quot; : &quot;Book removed (but not really)&quot;
+}" doc:name="JSON Message"/>
+    <set-property propertyName="Content-Type" value="application/java" doc:name="Java Content Property"/>
+    <logger message="#[dw('{environment: &quot;${env}&quot;, service: flowVars.service, correlationId: flowVars.correlationId, inboundProperties: inboundProperties, outboundProperties: outboundProperties, payload: payload}', 'application/json')]" level="INFO" category="delete-book.end" doc:name="Log End"/>
+
+  </flow>
+</mule>

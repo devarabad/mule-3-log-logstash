@@ -1,0 +1,73 @@
+#%RAML 1.0
+title: Mulesoft Book App
+version: v2
+baseUri: https://localhost:8081/api
+mediaType: application/json
+
+types: 
+  Book: !include datatypes/book.raml
+
+/books:
+  /{id}:
+    get:
+      displayName: Retrieve book information
+      description: Return the book information
+      responses:
+        200: 
+          body:
+            application/json:
+              type: Book
+              example: !include examples/get_book_example.raml
+    put:
+      displayName: Update book information
+      description: Return the updated book information
+      body: 
+        application/json:
+          type: Book
+          examples: 
+            input: !include examples/put_book_example.raml
+      responses: 
+        201:
+          body: 
+            application/json:
+              example: 
+                message: Book updated (but not really)
+    patch:
+      displayName: Update book information
+      description: Return the updated book information
+      body: 
+        application/json:
+          type: Book
+          examples: 
+            input: !include examples/patch_book_example.raml
+      responses: 
+        201:
+          body: 
+            application/json:
+              example: 
+                message: Book partially updated (but not really)
+    delete:
+      displayName: Remove book information
+      description: Return a message
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: 
+                message: Book removed (but not really)
+      
+  post:
+    displayName: Add book information
+    description: Return a message
+    body: 
+      application/json:
+        type: Book
+        examples: 
+          input: !include examples/post_book_example.raml
+    responses: 
+      201:
+        body: 
+          application/json:
+            example: 
+              message: Book added (but not really)
+      
